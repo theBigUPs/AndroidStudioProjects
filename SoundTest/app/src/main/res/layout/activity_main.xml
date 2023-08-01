@@ -8,6 +8,26 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/rightlvl_lbl"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/level_lbl" />
+
+    <TextView
+        android:id="@+id/leftlvl_lbl"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="92dp"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/level_lbl" />
+
+    <TextView
         android:id="@+id/level_lbl"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -42,5 +62,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/level_lbl" />
+
+    <Button
+        android:id="@+id/left_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

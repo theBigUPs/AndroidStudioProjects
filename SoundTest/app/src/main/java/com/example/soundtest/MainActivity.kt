@@ -2,10 +2,12 @@ package com.example.soundtest
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioRecord
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
@@ -26,7 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var poller: Runnable
     private val handler = Handler()
-
+    var prevLeft = 0.0
+    var prevRight = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,7 +50,11 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        binding.leftBtn.setOnClickListener {
 
+            playAudioFromLeftChannel(R.raw.bleep)
+
+        }
 
 
 
@@ -57,6 +64,11 @@ class MainActivity : AppCompatActivity() {
                startRecording()
                poller = Runnable {
                    val decibel = getDecibel()
+                   if (decibel>prevLeft)
+                   {
+                       prevLeft=decibel
+                       binding.leftlvlLbl.text = decibel.toString()
+                   }
                    binding.dblevelLbl.text = "${decibel.toString()}"
 
                    // Schedule the next update
@@ -163,6 +175,27 @@ class MainActivity : AppCompatActivity() {
         return 0.0
     }
 
+
+
+    private fun playAudioFromLeftChannel(audioResourceId: Int) {
+
+        val mediaPlayer = MediaPlayer()
+        // Set the audio channel configuration to left only (mono) by adjusting the volume
+        mediaPlayer.setVolume(1.0f, 0.0f)
+
+        // Set the data source to the audio file in res/raw folder
+        mediaPlayer.setDataSource(resources.openRawResourceFd(audioResourceId))
+
+        mediaPlayer.setOnCompletionListener {
+            // Release the MediaPlayer when audio playback is completed
+            mediaPlayer.release()
+        }
+
+        // Prepare and start playing the audio
+        mediaPlayer.prepare()
+        mediaPlayer.start()
+
+    }
 
 
 
