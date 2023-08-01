@@ -2,7 +2,9 @@ package com.example.soundtest
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.media.AudioDeviceInfo
 import android.media.AudioFormat
+import android.media.AudioManager
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Bundle
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private val RECORD_AUDIO_PERMISSION_REQUEST_CODE = 1001
     private lateinit var binding: ActivityMainBinding
-    private var control = true
+
     private lateinit var poller: Runnable
     private val handler = Handler()
 
@@ -42,9 +44,6 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.RECORD_AUDIO),
                 RECORD_AUDIO_PERMISSION_REQUEST_CODE
             )
-        } else {
-            // Permission is already granted, you can proceed with your code here
-            // For example, start recording audio or any other operation
         }
 
 
@@ -52,15 +51,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-
         binding.teatBtn.setOnClickListener {
-           if (control)
+           if (!isRecording)
            {
                startRecording()
-               //updateDecibelValue()
-
-
                poller = Runnable {
                    val decibel = getDecibel()
                    binding.dblevelLbl.text = "${decibel.toString()}"
@@ -70,14 +64,14 @@ class MainActivity : AppCompatActivity() {
                }
                handler.post(poller)
 
-               control=false
+
            }
            else
            {
                stopRecording()
                handler.removeCallbacks(poller)
                binding.dblevelLbl.text = "NaN"
-               control=true
+
            }
         }
     }
@@ -91,10 +85,11 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == RECORD_AUDIO_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // The permission is granted, you can proceed with your code here
-                // For example, start recording audio or any other operation
-            } else {
-                // The permission is denied, handle this scenario (e.g., show an explanation or disable related functionality)
+
+            }
+            else
+            {
+                // The permission is denied
 
                 ActivityCompat.requestPermissions(
                     this,
@@ -116,19 +111,14 @@ class MainActivity : AppCompatActivity() {
     private var audioRecord: AudioRecord? = null
     private var isRecording = false
 
-    fun startRecording() {
+    private fun startRecording() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.RECORD_AUDIO
             ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        )
+        {
+
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.RECORD_AUDIO),
@@ -148,7 +138,7 @@ class MainActivity : AppCompatActivity() {
         isRecording = true
     }
 
-    fun stopRecording() {
+    private fun stopRecording() {
         audioRecord?.apply {
             stop()
             release()
@@ -157,7 +147,7 @@ class MainActivity : AppCompatActivity() {
         audioRecord = null
     }
 
-    fun getDecibel(): Double {
+    private fun getDecibel(): Double {
         if (isRecording) {
             val buffer = ShortArray(bufferSize)
             audioRecord?.read(buffer, 0, bufferSize)
@@ -172,14 +162,6 @@ class MainActivity : AppCompatActivity() {
         }
         return 0.0
     }
-
-
-
-
-
-
-    // Override the onRequestPermissionsResult to handle the result of the permission request
-
 
 
 
