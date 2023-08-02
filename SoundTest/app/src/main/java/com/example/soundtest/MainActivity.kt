@@ -28,8 +28,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var poller: Runnable
     private val handler = Handler()
-    var prevLeft = 0.0
-    var prevRight = 0.0
+
+    private var leftChannel = false
+    private var rightChannel = false
+    private var prevLeft = 0.0
+    private var prevRight = 0.0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -52,24 +57,45 @@ class MainActivity : AppCompatActivity() {
 
         binding.leftBtn.setOnClickListener {
 
+            leftChannel = true
+            prevLeft = 0.0
+            binding.leftlvlLbl.text = ""
             playAudioFromLeftChannel(R.raw.bleep)
+
+        }
+
+        binding.rightBtn.setOnClickListener {
+
+            rightChannel = true
+            prevRight = 0.0
+            binding.rightlvlLbl.text = ""
+            playAudioFromRightChannel(R.raw.bleep)
 
         }
 
 
 
-        binding.teatBtn.setOnClickListener {
+
+        binding.testBtn.setOnClickListener {
            if (!isRecording)
            {
                startRecording()
                poller = Runnable {
                    val decibel = getDecibel()
-                   if (decibel>prevLeft)
+
+                   if (leftChannel && decibel>prevLeft)
                    {
                        prevLeft=decibel
                        binding.leftlvlLbl.text = decibel.toString()
                    }
-                   binding.dblevelLbl.text = "${decibel.toString()}"
+
+                   if (rightChannel && decibel>prevRight)
+                   {
+                       prevRight=decibel
+                       binding.rightlvlLbl.text = decibel.toString()
+                   }
+
+                   binding.dblevelLbl.text = decibel.toString()
 
                    // Schedule the next update
                    handler.postDelayed(poller, 100)
@@ -189,6 +215,7 @@ class MainActivity : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener {
             // Release the MediaPlayer when audio playback is completed
             mediaPlayer.release()
+            leftChannel=false
         }
 
         // Prepare and start playing the audio
@@ -197,7 +224,26 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun playAudioFromRightChannel(audioResourceId: Int) {
 
+        val mediaPlayer = MediaPlayer()
+        // Set the audio channel configuration to left only (mono) by adjusting the volume
+        mediaPlayer.setVolume(0.0f, 1.0f)
+
+        // Set the data source to the audio file in res/raw folder
+        mediaPlayer.setDataSource(resources.openRawResourceFd(audioResourceId))
+
+        mediaPlayer.setOnCompletionListener {
+            // Release the MediaPlayer when audio playback is completed
+            mediaPlayer.release()
+            rightChannel = false
+        }
+
+        // Prepare and start playing the audio
+        mediaPlayer.prepare()
+        mediaPlayer.start()
+
+    }
 
 
 
