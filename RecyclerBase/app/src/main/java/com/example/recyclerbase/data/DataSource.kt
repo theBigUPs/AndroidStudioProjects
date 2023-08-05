@@ -3,7 +3,7 @@ package com.example.recyclerbase.data
 import com.example.recyclerbase.R
 import com.example.recyclerbase.model.Affirmation
 
-class Data {
+class DataSource {
 
 
     fun loadAffirmations(): List<Affirmation> {
