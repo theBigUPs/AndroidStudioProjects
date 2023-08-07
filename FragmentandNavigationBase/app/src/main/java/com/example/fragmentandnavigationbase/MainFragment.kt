@@ -45,7 +45,7 @@ class MainFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        Log.e("onDestroyView is called","rest in peace sweet prince")
+        Log.e("onDestroyView is called on MainFragment","rest in peace sweet prince")
 
 
     }
