@@ -33,13 +33,21 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+
+
 }
 
 dependencies {
 
 
     implementation("androidx.fragment:fragment-ktx:1.6.1")
-    implementation("androidx.fragment:fragment:1.6.1")
+
     val navVersion = "2.6.0"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
