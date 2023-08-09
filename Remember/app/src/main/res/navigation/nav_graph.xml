@@ -9,5 +9,18 @@
         android:id="@+id/mainFragment"
         android:name="com.example.remember.fragments.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_newReminderFragment"
+            app:destination="@id/newReminderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newReminderFragment"
+        android:name="com.example.remember.fragments.NewReminderFragment"
+        android:label="fragment_new_reminder"
+        tools:layout="@layout/fragment_new_reminder" >
+        <action
+            android:id="@+id/action_newReminderFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>
