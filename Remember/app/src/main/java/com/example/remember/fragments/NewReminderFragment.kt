@@ -66,7 +66,6 @@ class NewReminderFragment : Fragment() {
         binding.calendarCv.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val selectedDate = "${year}-${month + 1}-${dayOfMonth}" // Month is 0-based
             // Handle the selected date as needed
-
             
         }
         
