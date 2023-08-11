@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.remember.R
-import com.example.remember.databinding.FragmentMainBinding
 import com.example.remember.databinding.FragmentNewReminderBinding
 import com.example.remember.models.NewReminderViewModel
 import java.util.Calendar
@@ -80,6 +79,12 @@ class NewReminderFragment : Fragment() {
             findNavController().navigate(R.id.action_newReminderFragment_to_mainFragment)
 
         }
+
+
+
+
+
+
 
     }
 

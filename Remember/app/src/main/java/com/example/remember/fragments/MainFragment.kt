@@ -1,5 +1,6 @@
 package com.example.remember.fragments
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.remember.R
+import com.example.remember.data.Notification
 import com.example.remember.databinding.FragmentMainBinding
 import com.example.remember.models.MainViewModel
 
@@ -31,10 +33,13 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
+        val context: Context = requireContext()
         binding.newBtn.setOnClickListener {
 
-            findNavController().navigate(R.id.action_mainFragment_to_newReminderFragment)
+            var k = Notification()
+            k.showNotification(context, "Notification Title", "This is the notification message.")
+
+
 
         }
 
