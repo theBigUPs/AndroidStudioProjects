@@ -8,10 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.remember.R
 import com.example.remember.data.Notification
+import com.example.remember.data.ScheduleReminder
 import com.example.remember.databinding.FragmentMainBinding
 import com.example.remember.models.MainViewModel
+import java.util.concurrent.TimeUnit
 
 class MainFragment : Fragment() {
 
@@ -36,8 +40,10 @@ class MainFragment : Fragment() {
         val context: Context = requireContext()
         binding.newBtn.setOnClickListener {
 
-            var k = Notification()
-            k.showNotification(context, "Notification Title", "This is the notification message.")
+            //var k = Notification()
+            //k.showNotification(context, "Notification Title", "This is the notification message.")
+            //findNavController().navigate(R.id.action_mainFragment_to_newReminderFragment)
+
 
 
 

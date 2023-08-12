@@ -21,12 +21,12 @@ import com.example.remember.R
 class Notification {
 
     fun showNotification(context: Context, title: String, message: String) {
-        val channelId = "my_channel_id" // Unique ID for the channel
+        val channelId = "reminder" // Unique ID for the channel
         val notificationId = 1 // Unique ID for the notification
 
         // Create a notification channel (for Android 8.0 and above)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, "My Channel", NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(channelId, "Reminder Channel", NotificationManager.IMPORTANCE_DEFAULT)
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager?.createNotificationChannel(channel)
         }
@@ -41,12 +41,8 @@ class Notification {
 
         // Show the notification
         with(NotificationManagerCompat.from(context)) {
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+            {
                 return
             }
             notify(notificationId, builder.build())

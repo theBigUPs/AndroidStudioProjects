@@ -34,12 +34,14 @@ class NewReminderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[NewReminderViewModel::class.java]
-
+        var calenderSelected = false
+        var timeSelected = false
 
 
         binding.timeTp.setIs24HourView(true)
         binding.timeTp.setOnTimeChangedListener { _, hourOfDay, minute ->
             // Retrieve the selected hour and minute
+            timeSelected = true
             val currentTime = Calendar.getInstance()
 
             // Set the selected time from the TimePicker
@@ -65,10 +67,12 @@ class NewReminderFragment : Fragment() {
         binding.calendarCv.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val selectedDate = "${year}-${month + 1}-${dayOfMonth}" // Month is 0-based
             // Handle the selected date as needed
-
+            calenderSelected = true
         }
         
         binding.createBtn.setOnClickListener {
+
+
 
             findNavController().navigate(R.id.action_newReminderFragment_to_mainFragment)
 
