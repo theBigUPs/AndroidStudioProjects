@@ -42,7 +42,7 @@ class MainFragment : Fragment() {
 
             //var k = Notification()
             //k.showNotification(context, "Notification Title", "This is the notification message.")
-            //findNavController().navigate(R.id.action_mainFragment_to_newReminderFragment)
+            findNavController().navigate(R.id.action_mainFragment_to_newReminderFragment)
 
 
 

@@ -1,18 +1,19 @@
 package com.example.remember.data
 
 import android.content.Context
-import android.util.Log
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import java.util.concurrent.TimeUnit
+
 
 class ScheduleReminder(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
         // Background task code
-        Log.d("task","Delayed task executed after 5 secs.")
+
+        val inputData = inputData.getString("worker_key")
+        val applicationContext = applicationContext
+        val notification = Notification()
+        notification.showNotification(applicationContext,"reminder","executed after "+inputData.toString()+" seconds")
         return Result.success()
     }
 
