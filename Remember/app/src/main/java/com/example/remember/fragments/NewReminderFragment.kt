@@ -78,23 +78,26 @@ class NewReminderFragment : Fragment() {
 
         }
 
-        binding.calendarCv.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            val selectedDate = "${year}-${month + 1}-${dayOfMonth}" // Month is 0-based
-            // Handle the selected date as needed
-            calenderSelected = true
-        }
+
         
         binding.createBtn.setOnClickListener {
 
             if(timeSelected)
             {
 
+
+                var message = binding.remindertextEt.text.toString()
+                if(message=="null")
+                {
+                    message=""
+                }
+                Log.d("message",binding.remindertextEt.text.toString())
                 val inputData = Data.Builder()
-                    .putString("worker_key", (timeDifferenceMillis/1000).toString())
+                    .putString("worker_key", message)
                     .build()
 
 
-                Log.d("seconds",(timeDifferenceMillis/1000).toString())
+                //Log.d("seconds",(timeDifferenceMillis/1000).toString())
                 val workRequest = OneTimeWorkRequest.Builder(ScheduleReminder::class.java)
                     .setInputData(inputData)
                     .setInitialDelay(timeDifferenceMillis, TimeUnit.MILLISECONDS)

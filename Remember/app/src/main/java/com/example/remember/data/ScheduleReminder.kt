@@ -13,7 +13,7 @@ class ScheduleReminder(context: Context, workerParams: WorkerParameters) : Worke
         val inputData = inputData.getString("worker_key")
         val applicationContext = applicationContext
         val notification = Notification()
-        notification.showNotification(applicationContext,"reminder","executed after "+inputData.toString()+" seconds")
+        notification.showNotification(applicationContext,"reminder",inputData.toString())
         return Result.success()
     }
 
