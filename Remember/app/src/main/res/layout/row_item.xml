@@ -12,7 +12,7 @@
         android:layout_marginTop="16dp"
         android:text="TextView"
         android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/radioButton2"
+        app:layout_constraintStart_toEndOf="@+id/delete_rb"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -27,13 +27,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioButton
-        android:id="@+id/radioButton2"
+        android:id="@+id/delete_rb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:clickable="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
