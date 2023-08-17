@@ -3,6 +3,7 @@ package com.example.remember.fragments
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,8 +38,24 @@ class MainFragment : Fragment() {
 
 
         binding.remindersRcv.layoutManager = LinearLayoutManager(context)
-        val reminderAdapter = ReminderAdapter(itemList)
+        val reminderAdapter = ReminderAdapter(itemList, viewModel)
         binding.remindersRcv.adapter = reminderAdapter
+
+
+        val newItem = Item("dinner","1","12")
+        itemList.add(newItem)
+        //adapter.notifyItemInserted(itemList.size - 1)
+        reminderAdapter.notifyItemInserted(itemList.size - 1)
+        val newItem1 = Item("dinner","2","12")
+        itemList.add(newItem1)
+        //adapter.notifyItemInserted(itemList.size - 1)
+        reminderAdapter.notifyItemInserted(itemList.size - 1)
+
+        val newItem2 = Item("dinner","3","12")
+        itemList.add(newItem2)
+        //adapter.notifyItemInserted(itemList.size - 1)
+        reminderAdapter.notifyItemInserted(itemList.size - 1)
+
 
         binding.newBtn.setOnClickListener {
 
@@ -47,14 +64,41 @@ class MainFragment : Fragment() {
             //var k = Notification()
             //k.showNotification(context, "Notification Title", "This is the notification message.")
             //findNavController().navigate(R.id.action_mainFragment_to_newReminderFragment)
+            itemList.remove(itemList[itemList.size-1])
+            reminderAdapter.notifyItemRemoved(itemList.size )
 
-
-            val newItem = Item("dinner","12:15","12")
-            itemList.add(newItem)
-            //adapter.notifyItemInserted(itemList.size - 1)
-            reminderAdapter.notifyItemInserted(itemList.size - 1)
         }
 
+        viewModel.isBooleanLiveData.observe(viewLifecycleOwner) { newValue ->
+            // React to changes in the boolean value
+            Log.e("bool",newValue.toString())
+            if (newValue) {
+                // The boolean is true
 
+                binding.cancelMainFragmentBtn.visibility = View.VISIBLE
+                binding.removeBtn.visibility = View.VISIBLE
+
+            }
+            else
+            {
+                // The boolean is false
+                binding.cancelMainFragmentBtn.visibility = View.GONE
+                binding.removeBtn.visibility = View.GONE
+
+            }
+
+
+        }
+
+        binding.cancelMainFragmentBtn.setOnClickListener {
+
+            viewModel.updateBooleanValue(false)
+
+        }
+        binding.removeBtn.setOnClickListener {
+
+            viewModel.updateBooleanValue(false)
+
+        }
     }
 }

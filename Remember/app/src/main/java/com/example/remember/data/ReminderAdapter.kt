@@ -1,16 +1,35 @@
 package com.example.remember.data
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.remember.R
 import com.example.remember.models.Item
+import com.example.remember.models.MainViewModel
 
-class ReminderAdapter (private val itemList: List<Item>,private val itemClickListener: ((Item) -> Unit)? = null, private val itemLongClickListener: ((Item) -> Unit)? = null) : RecyclerView.Adapter<ReminderAdapter.ViewHolder>() {
+class ReminderAdapter (private val itemList: List<Item>,private val viewModel: MainViewModel ,private val itemClickListener: ((Item) -> Unit)? = null, private val itemLongClickListener: ((Item) -> Unit)? = null) : RecyclerView.Adapter<ReminderAdapter.ViewHolder>() {
     private var isViewVisible = false
+
+    private var removeList: MutableList<Int> = mutableListOf()
+
+
+    init {
+        viewModel.isBooleanLiveData.observeForever { newValue ->
+            // Update the visibility of the delete RadioButton
+            isViewVisible = !newValue
+            isViewVisible = !isViewVisible
+            // Notify adapter that the data has changed
+            notifyItemRangeChanged(0, itemCount)
+            //viewModel.updateBooleanValue(true)
+        }
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.row_item, parent, false)
         return ViewHolder(itemView)
@@ -22,16 +41,21 @@ class ReminderAdapter (private val itemList: List<Item>,private val itemClickLis
         holder.title.text = currentItem.title
         holder.time.text=currentItem.time
 
-        holder.delete.visibility =if (isViewVisible) View.VISIBLE else View.INVISIBLE
+        holder.delete.visibility =if (isViewVisible) View.VISIBLE else View.GONE
         holder.itemView.setOnLongClickListener {
             // Toggle the visibility state of the view
-
-            isViewVisible = !isViewVisible
-            // Notify adapter that the data has changed
-            notifyItemRangeChanged(0, itemCount)
-
+            if(holder.delete.visibility==View.GONE)
+            {
+                isViewVisible = !isViewVisible
+                // Notify adapter that the data has changed
+                notifyItemRangeChanged(0, itemCount)
+                viewModel.updateBooleanValue(true)
+            }
             true // Return true to indicate that the long click is consumed
         }
+
+
+
 
     }
 
@@ -56,9 +80,33 @@ class ReminderAdapter (private val itemList: List<Item>,private val itemClickLis
                         delete.isChecked = !delete.isChecked
                     }
 
-                }
 
+                    if(delete.isChecked)
+                    {
+                        Log.e("checked",position.toString())
+                        removeList.add(position)
+                    }
+                    else
+                    {
+                        Log.e("unchecked",position.toString())
+                        removeList.remove(position)
+                    }
+
+
+
+                }
             }
+
+
+
+
+
+
+
         }
+
+
+
+
     }
 }
