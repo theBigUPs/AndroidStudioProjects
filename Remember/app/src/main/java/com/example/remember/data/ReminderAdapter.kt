@@ -23,6 +23,7 @@ class ReminderAdapter (private val itemList: List<Item>,private val viewModel: M
             // Update the visibility of the delete RadioButton
             isViewVisible = !newValue
             isViewVisible = !isViewVisible
+
             // Notify adapter that the data has changed
             notifyItemRangeChanged(0, itemCount)
             //viewModel.updateBooleanValue(true)
@@ -41,16 +42,24 @@ class ReminderAdapter (private val itemList: List<Item>,private val viewModel: M
         holder.title.text = currentItem.title
         holder.time.text=currentItem.time
 
-        holder.delete.visibility =if (isViewVisible) View.VISIBLE else View.GONE
+        holder.delete.visibility = if (isViewVisible) View.VISIBLE else View.GONE
+
+        holder.delete.isChecked = false
+
         holder.itemView.setOnLongClickListener {
+            //holder.delete.isChecked = false
+
             // Toggle the visibility state of the view
             if(holder.delete.visibility==View.GONE)
             {
-                isViewVisible = !isViewVisible
+
                 // Notify adapter that the data has changed
                 notifyItemRangeChanged(0, itemCount)
                 viewModel.updateBooleanValue(true)
             }
+
+
+
             true // Return true to indicate that the long click is consumed
         }
 
@@ -70,6 +79,11 @@ class ReminderAdapter (private val itemList: List<Item>,private val viewModel: M
         val delete: RadioButton = itemView.findViewById(R.id.delete_rb)
 
         init {
+
+
+
+
+
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -88,7 +102,7 @@ class ReminderAdapter (private val itemList: List<Item>,private val viewModel: M
                     }
                     else
                     {
-                        Log.e("unchecked",position.toString())
+                        //Log.e("unchecked",position.toString())
                         viewModel.deleteFromRemoveList(position)
                     }
 

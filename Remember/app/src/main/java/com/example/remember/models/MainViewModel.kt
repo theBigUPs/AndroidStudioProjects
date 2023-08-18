@@ -1,5 +1,6 @@
 package com.example.remember.models
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +20,9 @@ class MainViewModel : ViewModel() {
     }
 
 
+    init {
+        removeListLiveData.value = mutableListOf() // Initialize with an empty list
+    }
 
     val getRemoveListLiveData: LiveData<MutableList<Int>>
         get() = removeListLiveData
@@ -27,11 +31,10 @@ class MainViewModel : ViewModel() {
     fun addRemoveList(newIndex:Int)
     {
 
-        removeListLiveData.value?.apply {
-            add(newIndex)
-            removeListLiveData.value = this
-        }
-
+        val updatedList = removeListLiveData.value ?: mutableListOf()
+        updatedList.add(newIndex)
+        removeListLiveData.value = updatedList
+        //Log.e("added", removeListLiveData.value!![0].toString())
     }
 
     fun deleteFromRemoveList(index:Int)
