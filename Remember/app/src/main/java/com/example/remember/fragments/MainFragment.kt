@@ -64,8 +64,8 @@ class MainFragment : Fragment() {
             //var k = Notification()
             //k.showNotification(context, "Notification Title", "This is the notification message.")
             //findNavController().navigate(R.id.action_mainFragment_to_newReminderFragment)
-            itemList.remove(itemList[itemList.size-1])
-            reminderAdapter.notifyItemRemoved(itemList.size )
+            //itemList.remove(itemList[itemList.size-1])
+            //reminderAdapter.notifyItemRemoved(itemList.size )
 
         }
 
@@ -92,11 +92,25 @@ class MainFragment : Fragment() {
 
         binding.cancelMainFragmentBtn.setOnClickListener {
 
-            viewModel.updateBooleanValue(false)
+            //viewModel.updateBooleanValue(false)
+            val remList = viewModel.getRemoveListLiveData.value
+            Log.e("cancel","clicked")
+            remList?.let {
 
+                for(index in it)
+                {
+                    Log.e("list",index.toString())
+                }
+
+            }
         }
         binding.removeBtn.setOnClickListener {
 
+
+
+
+
+            //viewModel.clearRemoveList()
             viewModel.updateBooleanValue(false)
 
         }

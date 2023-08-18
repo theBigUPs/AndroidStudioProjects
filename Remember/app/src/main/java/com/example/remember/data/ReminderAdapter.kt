@@ -15,7 +15,7 @@ import com.example.remember.models.MainViewModel
 class ReminderAdapter (private val itemList: List<Item>,private val viewModel: MainViewModel ,private val itemClickListener: ((Item) -> Unit)? = null, private val itemLongClickListener: ((Item) -> Unit)? = null) : RecyclerView.Adapter<ReminderAdapter.ViewHolder>() {
     private var isViewVisible = false
 
-    private var removeList: MutableList<Int> = mutableListOf()
+
 
 
     init {
@@ -83,13 +83,13 @@ class ReminderAdapter (private val itemList: List<Item>,private val viewModel: M
 
                     if(delete.isChecked)
                     {
-                        Log.e("checked",position.toString())
-                        removeList.add(position)
+                        viewModel.addRemoveList(position)
+
                     }
                     else
                     {
                         Log.e("unchecked",position.toString())
-                        removeList.remove(position)
+                        viewModel.deleteFromRemoveList(position)
                     }
 
 
