@@ -11,6 +11,10 @@ class MainViewModel : ViewModel() {
 
     private val removeListLiveData = MutableLiveData<MutableList<Int>>()
 
+    private var itemListLiveData = MutableLiveData<MutableList<Item>>()
+
+
+
     val isBooleanLiveData: LiveData<Boolean>
         get() = setButtonVisibleLiveData
 
@@ -22,6 +26,7 @@ class MainViewModel : ViewModel() {
 
     init {
         removeListLiveData.value = mutableListOf() // Initialize with an empty list
+        itemListLiveData.value = mutableListOf()
     }
 
     val getRemoveListLiveData: LiveData<MutableList<Int>>

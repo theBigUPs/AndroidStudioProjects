@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.remember.R
 import com.example.remember.data.ReminderAdapter
 import com.example.remember.databinding.FragmentMainBinding
 import com.example.remember.models.Item
@@ -42,38 +44,45 @@ class MainFragment : Fragment() {
         binding.remindersRcv.adapter = reminderAdapter
 
 
-        val newItem = Item("dinner","1","12")
+        val newItem = Item("dinner","1",12)
         itemList.add(newItem)
         //adapter.notifyItemInserted(itemList.size - 1)
         reminderAdapter.notifyItemInserted(itemList.size - 1)
-        val newItem1 = Item("dinner","2","12")
+        val newItem1 = Item("dinner","2",12)
         itemList.add(newItem1)
         //adapter.notifyItemInserted(itemList.size - 1)
         reminderAdapter.notifyItemInserted(itemList.size - 1)
 
-        val newItem2 = Item("dinner","3","12")
+        val newItem2 = Item("dinner","3",12)
         itemList.add(newItem2)
         //adapter.notifyItemInserted(itemList.size - 1)
         reminderAdapter.notifyItemInserted(itemList.size - 1)
 
+        val newItem3 = Item("dinner","4",12)
+        itemList.add(newItem3)
+        //adapter.notifyItemInserted(itemList.size - 1)
+        reminderAdapter.notifyItemInserted(itemList.size - 1)
+        val newItem4 = Item("dinner","5",12)
+        itemList.add(newItem4)
+        //adapter.notifyItemInserted(itemList.size - 1)
+        reminderAdapter.notifyItemInserted(itemList.size - 1)
 
         binding.newBtn.setOnClickListener {
 
 
 
+
             //var k = Notification()
             //k.showNotification(context, "Notification Title", "This is the notification message.")
-            //findNavController().navigate(R.id.action_mainFragment_to_newReminderFragment)
+            findNavController().navigate(R.id.action_mainFragment_to_newReminderFragment)
             //itemList.remove(itemList[itemList.size-1])
             //reminderAdapter.notifyItemRemoved(itemList.size )
 
         }
 
         viewModel.isBooleanLiveData.observe(viewLifecycleOwner) { newValue ->
-            // React to changes in the boolean value
-            Log.e("bool",newValue.toString())
+
             if (newValue) {
-                // The boolean is true
 
                 binding.cancelMainFragmentBtn.visibility = View.VISIBLE
                 binding.removeBtn.visibility = View.VISIBLE
@@ -81,7 +90,7 @@ class MainFragment : Fragment() {
             }
             else
             {
-                // The boolean is false
+
                 binding.cancelMainFragmentBtn.visibility = View.GONE
                 binding.removeBtn.visibility = View.GONE
 
@@ -92,25 +101,24 @@ class MainFragment : Fragment() {
 
         binding.cancelMainFragmentBtn.setOnClickListener {
 
-            //viewModel.updateBooleanValue(false)
-            val remList = viewModel.getRemoveListLiveData.value
-            Log.e("cancel","clicked")
-            remList?.let {
+            viewModel.updateBooleanValue(false)
+            viewModel.clearRemoveList()
 
+        }
+
+        binding.removeBtn.setOnClickListener {
+            //need to destroy the scheduled workers as well
+            val remList = viewModel.getRemoveListLiveData.value
+            remList?.let {
+                it.sortDescending()
                 for(index in it)
                 {
-                    Log.e("list",index.toString())
+                    itemList.removeAt(index)
+                    reminderAdapter.notifyItemRemoved(index)
                 }
 
             }
-        }
-        binding.removeBtn.setOnClickListener {
-
-
-
-
-
-            //viewModel.clearRemoveList()
+            viewModel.clearRemoveList()
             viewModel.updateBooleanValue(false)
 
         }

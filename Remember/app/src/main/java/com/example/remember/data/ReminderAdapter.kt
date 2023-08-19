@@ -58,13 +58,8 @@ class ReminderAdapter (private val itemList: List<Item>,private val viewModel: M
                 viewModel.updateBooleanValue(true)
             }
 
-
-
             true // Return true to indicate that the long click is consumed
         }
-
-
-
 
     }
 
@@ -79,10 +74,6 @@ class ReminderAdapter (private val itemList: List<Item>,private val viewModel: M
         val delete: RadioButton = itemView.findViewById(R.id.delete_rb)
 
         init {
-
-
-
-
 
             itemView.setOnClickListener {
                 val position = adapterPosition
@@ -111,16 +102,7 @@ class ReminderAdapter (private val itemList: List<Item>,private val viewModel: M
                 }
             }
 
-
-
-
-
-
-
         }
-
-
-
 
     }
 }
