@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.remember.R
@@ -15,6 +16,7 @@ import com.example.remember.data.ReminderAdapter
 import com.example.remember.databinding.FragmentMainBinding
 import com.example.remember.models.Item
 import com.example.remember.models.MainViewModel
+import com.example.remember.models.NewReminderViewModel
 
 class MainFragment : Fragment() {
 
@@ -24,7 +26,7 @@ class MainFragment : Fragment() {
     }
     private var itemList: MutableList<Item> = mutableListOf()
     private lateinit var viewModel: MainViewModel
-
+    private val sharedViewModel: NewReminderViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,7 +44,6 @@ class MainFragment : Fragment() {
         binding.remindersRcv.layoutManager = LinearLayoutManager(context)
         val reminderAdapter = ReminderAdapter(itemList, viewModel)
         binding.remindersRcv.adapter = reminderAdapter
-
 
         val newItem = Item("dinner","1",12)
         itemList.add(newItem)
@@ -67,10 +68,8 @@ class MainFragment : Fragment() {
         //adapter.notifyItemInserted(itemList.size - 1)
         reminderAdapter.notifyItemInserted(itemList.size - 1)
 
+
         binding.newBtn.setOnClickListener {
-
-
-
 
             //var k = Notification()
             //k.showNotification(context, "Notification Title", "This is the notification message.")
@@ -95,8 +94,6 @@ class MainFragment : Fragment() {
                 binding.removeBtn.visibility = View.GONE
 
             }
-
-
         }
 
         binding.cancelMainFragmentBtn.setOnClickListener {

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
@@ -28,7 +29,7 @@ class NewReminderFragment : Fragment() {
         fun newInstance() = NewReminderFragment()
     }
 
-    private lateinit var viewModel: NewReminderViewModel
+    private val sharedViewModel: NewReminderViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +41,6 @@ class NewReminderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[NewReminderViewModel::class.java]
         val context: Context = requireContext()
         var calenderSelected = false
         var timeSelected = false
@@ -87,11 +87,7 @@ class NewReminderFragment : Fragment() {
 
 
                 var message = binding.remindertextEt.text.toString()
-                if(message=="null")
-                {
-                    message=""
-                }
-                Log.d("message",binding.remindertextEt.text.toString())
+                //check if message empty if empty go no further and make a toast warning the user
                 val inputData = Data.Builder()
                     .putString("worker_key", message)
                     .build()
