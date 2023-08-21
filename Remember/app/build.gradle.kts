@@ -43,6 +43,9 @@ android {
 
 dependencies {
 
+
+    implementation ("com.google.code.gson:gson:2.8.9") // Use the latest version
+
     implementation ("androidx.work:work-runtime-ktx:2.7.0")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")

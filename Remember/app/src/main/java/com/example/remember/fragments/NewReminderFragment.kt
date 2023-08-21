@@ -86,7 +86,7 @@ class NewReminderFragment : Fragment() {
             {
 
 
-                var message = binding.remindertextEt.text.toString()
+                val message = binding.remindertextEt.text.toString()
                 //check if message empty if empty go no further and make a toast warning the user
                 val inputData = Data.Builder()
                     .putString("worker_key", message)
