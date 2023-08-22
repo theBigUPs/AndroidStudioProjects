@@ -1,9 +1,7 @@
 package com.example.remember.fragments
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +14,7 @@ import androidx.work.WorkManager
 import com.example.remember.R
 import com.example.remember.data.ScheduleReminder
 import com.example.remember.databinding.FragmentNewReminderBinding
+import com.example.remember.models.Item
 import com.example.remember.models.NewReminderViewModel
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -44,10 +43,11 @@ class NewReminderFragment : Fragment() {
         val context: Context = requireContext()
         var calenderSelected = false
         var timeSelected = false
-
+        lateinit var hour:String
+        lateinit var minute:String
 
         binding.timeTp.setIs24HourView(true)
-        binding.timeTp.setOnTimeChangedListener { _, hourOfDay, minute ->
+        binding.timeTp.setOnTimeChangedListener { _, hourOfDay, minutes ->
             // Retrieve the selected hour and minute
             timeSelected = true
             val currentTime = Calendar.getInstance()
@@ -55,10 +55,11 @@ class NewReminderFragment : Fragment() {
             // Set the selected time from the TimePicker
             val selectedTime = Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, hourOfDay)
-                set(Calendar.MINUTE, minute)
+                set(Calendar.MINUTE, minutes)
                 set(Calendar.SECOND, 0)
             }
-
+            hour = hourOfDay.toString()
+            minute = minutes.toString()
 
             timeDifferenceMillis = selectedTime.timeInMillis - currentTime.timeInMillis
 
@@ -88,21 +89,27 @@ class NewReminderFragment : Fragment() {
 
                 val message = binding.remindertextEt.text.toString()
                 //check if message empty if empty go no further and make a toast warning the user
-                val inputData = Data.Builder()
-                    .putString("worker_key", message)
-                    .build()
+
+                    val inputData = Data.Builder()
+                        .putString("worker_key", message)
+                        .build()
 
 
-                //Log.d("seconds",(timeDifferenceMillis/1000).toString())
-                val workRequest = OneTimeWorkRequest.Builder(ScheduleReminder::class.java)
-                    .setInputData(inputData)
-                    .setInitialDelay(timeDifferenceMillis, TimeUnit.MILLISECONDS)
-                    .build()
-                WorkManager.getInstance(context).enqueue(workRequest)
-                val workRequestId = workRequest.id
+                    //Log.d("seconds",(timeDifferenceMillis/1000).toString())
+                    val workRequest = OneTimeWorkRequest.Builder(ScheduleReminder::class.java)
+                        .setInputData(inputData)
+                        .setInitialDelay(timeDifferenceMillis, TimeUnit.MILLISECONDS)
+                        .build()
+                    WorkManager.getInstance(context).enqueue(workRequest)
+                    val workRequestId = workRequest.id
+
+                val newItem = Item(message, "$hour:$minute",workRequestId)
+                sharedViewModel.getItemListLiveData.value?.add(newItem)
+                sharedViewModel.updateAdapterBooleanValue(true)
+
             }
 
-            //findNavController().navigate(R.id.action_newReminderFragment_to_mainFragment)
+            findNavController().navigate(R.id.action_newReminderFragment_to_mainFragment)
 
         }
 

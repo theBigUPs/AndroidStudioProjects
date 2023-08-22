@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkManager
 import com.example.remember.R
 import com.example.remember.data.ReminderAdapter
 import com.example.remember.databinding.FragmentMainBinding
@@ -23,7 +24,7 @@ class MainFragment : Fragment() {
     companion object {
         fun newInstance() = MainFragment()
     }
-    private var itemList: MutableList<Item> = mutableListOf()
+
     private lateinit var viewModel: MainViewModel
     private val sharedViewModel: NewReminderViewModel by activityViewModels()
     override fun onCreateView(
@@ -41,31 +42,9 @@ class MainFragment : Fragment() {
 
 
         binding.remindersRcv.layoutManager = LinearLayoutManager(context)
-        val reminderAdapter = ReminderAdapter(itemList, viewModel)
+        val reminderAdapter = sharedViewModel.getItemListLiveData.value?.let { ReminderAdapter(it, viewModel) }
         binding.remindersRcv.adapter = reminderAdapter
 
-        val newItem = Item("dinner","1",12)
-        itemList.add(newItem)
-        //adapter.notifyItemInserted(itemList.size - 1)
-        reminderAdapter.notifyItemInserted(itemList.size - 1)
-        val newItem1 = Item("dinner","2",12)
-        itemList.add(newItem1)
-        //adapter.notifyItemInserted(itemList.size - 1)
-        reminderAdapter.notifyItemInserted(itemList.size - 1)
-
-        val newItem2 = Item("dinner","3",12)
-        itemList.add(newItem2)
-        //adapter.notifyItemInserted(itemList.size - 1)
-        reminderAdapter.notifyItemInserted(itemList.size - 1)
-
-        val newItem3 = Item("dinner","4",12)
-        itemList.add(newItem3)
-        //adapter.notifyItemInserted(itemList.size - 1)
-        reminderAdapter.notifyItemInserted(itemList.size - 1)
-        val newItem4 = Item("dinner","5",12)
-        itemList.add(newItem4)
-        //adapter.notifyItemInserted(itemList.size - 1)
-        reminderAdapter.notifyItemInserted(itemList.size - 1)
 
 
         binding.newBtn.setOnClickListener {
@@ -95,6 +74,18 @@ class MainFragment : Fragment() {
             }
         }
 
+
+        sharedViewModel.isUpdateAdapterBooleanLiveData.observe(viewLifecycleOwner)
+        {newValue->
+            if (newValue)
+            {
+                reminderAdapter?.notifyItemInserted(sharedViewModel.getItemListLiveData.value?.size!!-1)
+                sharedViewModel.updateAdapterBooleanValue(false)
+            }
+        }
+
+
+
         binding.cancelMainFragmentBtn.setOnClickListener {
 
             viewModel.updateBooleanValue(false)
@@ -109,8 +100,14 @@ class MainFragment : Fragment() {
                 it.sortDescending()
                 for(index in it)
                 {
-                    itemList.removeAt(index)
-                    reminderAdapter.notifyItemRemoved(index)
+
+                    val id = sharedViewModel.getItemListLiveData.value?.get(index)?.workerId
+
+                    if (id != null) {
+                        WorkManager.getInstance(context).cancelWorkById(id)
+                    }
+                    sharedViewModel.getItemListLiveData.value?.removeAt(index)
+                    reminderAdapter?.notifyItemRemoved(index)
                 }
 
             }

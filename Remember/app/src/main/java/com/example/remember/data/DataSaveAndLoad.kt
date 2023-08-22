@@ -12,20 +12,7 @@ import java.util.UUID
 class DataSaveAndLoad(private val context: Context, private val viewModel: NewReminderViewModel) {
 
 
-    fun addItemList(newItem: Item)
-    {
-        viewModel.getItemListLiveData.value?.add(newItem)
-        //adapter.notifyItemInserted(itemList.size - 1)
 
-    }
-
-    fun removeItemList(itemIndex:Int, workerId:UUID)
-    {
-        //schedule worker gets cancelled here as well
-        viewModel.getItemListLiveData.value?.removeAt(itemIndex)
-        WorkManager.getInstance(context).cancelWorkById(workerId)
-
-    }
 
     fun saveItemList()
     {
