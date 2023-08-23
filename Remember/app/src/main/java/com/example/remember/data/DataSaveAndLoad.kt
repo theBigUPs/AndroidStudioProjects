@@ -1,20 +1,15 @@
 package com.example.remember.data
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
-import androidx.work.WorkManager
 import com.example.remember.models.Item
-import com.example.remember.models.NewReminderViewModel
+import com.example.remember.models.DataAccessViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.UUID
 
-class DataSaveAndLoad(private val context: Context, private val viewModel: NewReminderViewModel) {
-
+class DataSaveAndLoad(private val viewModel: DataAccessViewModel) {
 
 
-
-    fun saveItemList()
+    fun saveItemList(context: Context)
     {
         val gson = Gson()
         val jsonList = gson.toJson(viewModel.getItemListLiveData.value)
@@ -26,7 +21,7 @@ class DataSaveAndLoad(private val context: Context, private val viewModel: NewRe
         editor.apply()
     }
 
-    fun loadItemList()
+    fun loadItemList(context: Context)
     {
         val sharedPreferences = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
         //load json and assign it to livedata
@@ -39,6 +34,8 @@ class DataSaveAndLoad(private val context: Context, private val viewModel: NewRe
         //var itemListLiveData = MutableLiveData<MutableList<Item>>()
         viewModel.getItemListLiveData.value?.addAll(yourList)
     }
+
+
 
 
 

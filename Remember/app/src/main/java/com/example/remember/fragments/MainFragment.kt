@@ -8,15 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
 import com.example.remember.R
 import com.example.remember.data.ReminderAdapter
 import com.example.remember.databinding.FragmentMainBinding
-import com.example.remember.models.Item
 import com.example.remember.models.MainViewModel
-import com.example.remember.models.NewReminderViewModel
+import com.example.remember.models.DataAccessViewModel
+import com.example.remember.models.ScheduleViewModel
 
 class MainFragment : Fragment() {
 
@@ -26,7 +27,8 @@ class MainFragment : Fragment() {
     }
 
     private lateinit var viewModel: MainViewModel
-    private val sharedViewModel: NewReminderViewModel by activityViewModels()
+    private val sharedViewModel: DataAccessViewModel by activityViewModels()
+    private val scheduleViewModel: ScheduleViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -104,7 +106,7 @@ class MainFragment : Fragment() {
                     val id = sharedViewModel.getItemListLiveData.value?.get(index)?.workerId
 
                     if (id != null) {
-                        WorkManager.getInstance(context).cancelWorkById(id)
+                        scheduleViewModel.cancelWorker(context,id)
                     }
                     sharedViewModel.getItemListLiveData.value?.removeAt(index)
                     reminderAdapter?.notifyItemRemoved(index)
