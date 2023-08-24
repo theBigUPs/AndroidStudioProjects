@@ -32,7 +32,11 @@ class DataSaveAndLoad(private val viewModel: DataAccessViewModel) {
         val listType = object : TypeToken<MutableList<Item>>() {}.type
         val yourList = gson.fromJson<MutableList<Item>>(jsonList, listType)
         //var itemListLiveData = MutableLiveData<MutableList<Item>>()
-        viewModel.getItemListLiveData.value?.addAll(yourList)
+        if(yourList!=null)
+        {
+            viewModel.getItemListLiveData.value?.addAll(yourList)
+        }
+
     }
 
 

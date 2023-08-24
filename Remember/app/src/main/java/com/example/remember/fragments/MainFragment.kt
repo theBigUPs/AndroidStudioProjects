@@ -3,6 +3,7 @@ package com.example.remember.fragments
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,10 @@ class MainFragment : Fragment() {
         val reminderAdapter = sharedViewModel.getItemListLiveData.value?.let { ReminderAdapter(it, viewModel) }
         binding.remindersRcv.adapter = reminderAdapter
 
+        sharedViewModel.getItemListLiveData.value?.clear()
+        sharedViewModel.loadData(context)
+
+
 
 
         binding.newBtn.setOnClickListener {
@@ -55,7 +60,7 @@ class MainFragment : Fragment() {
             //k.showNotification(context, "Notification Title", "This is the notification message.")
             findNavController().navigate(R.id.action_mainFragment_to_newReminderFragment)
             //itemList.remove(itemList[itemList.size-1])
-            //reminderAdapter.notifyItemRemoved(itemList.size )
+            //reminderAdapter.notifyItemRemoved(itemList.size)
 
         }
 
@@ -112,7 +117,10 @@ class MainFragment : Fragment() {
                     reminderAdapter?.notifyItemRemoved(index)
                 }
 
+
+                sharedViewModel.saveData(context)
             }
+
             viewModel.clearRemoveList()
             viewModel.updateBooleanValue(false)
 

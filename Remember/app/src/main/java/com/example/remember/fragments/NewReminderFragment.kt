@@ -91,6 +91,7 @@ class NewReminderFragment : Fragment() {
                 val newItem = Item(message, "$hour:$minute",workRequestId)
                 sharedViewModel.getItemListLiveData.value?.add(newItem)
                 sharedViewModel.updateAdapterBooleanValue(true)
+                sharedViewModel.saveData(context)
                 findNavController().navigate(R.id.action_newReminderFragment_to_mainFragment)
             }
 
