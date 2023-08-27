@@ -13,42 +13,37 @@
         android:id="@+id/notification_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@android:drawable/ic_btn_speak_now"
+        android:src="@android:drawable/ic_lock_silent_mode_off"
         app:srcCompat="@drawable/ic_launcher_background"
         tools:srcCompat="@android:drawable/ic_lock_silent_mode_off" />
 
-    <ImageView
+    <Button
         android:id="@+id/vol_up"
-        android:layout_width="36dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:cropToPadding="true"
-        android:src="@android:drawable/arrow_up_float"
-        app:srcCompat="@android:drawable/alert_dark_frame" />
+        android:text="up" />
 
-    <ImageView
+    <Button
         android:id="@+id/vol_down"
-        android:layout_width="43dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:src="@android:drawable/arrow_down_float"
-        app:srcCompat="@android:drawable/alert_light_frame" />
+        android:text="down" />
 
-    <ImageView
+    <Button
         android:id="@+id/vol_max"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:src="@android:drawable/stat_sys_upload_done"
-        app:srcCompat="@android:drawable/ic_dialog_alert" />
+        android:text="max" />
 
-    <ImageView
+    <Button
         android:id="@+id/cancel"
-        android:layout_width="3dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:src="@android:drawable/btn_dialog"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        android:text="C" />
 
 
 </LinearLayout>
