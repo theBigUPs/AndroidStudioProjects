@@ -26,6 +26,7 @@ class ForegroundService : Service() {
         const val VOLUME_UP_ACTION = "VOLUME_UP_ACTION"
         const val VOLUME_DOWN_ACTION = "VOLUME_DOWN_ACTION"
         const val VOLUME_MAX_ACTION = "VOLUME_MAX_ACTION"
+        const val VOLUME_MUTE_ACTION = "VOLUME_MUTE_ACTION"
         const val STOP_ACTION = "STOP_ACTION"
     }
 
@@ -56,9 +57,15 @@ class ForegroundService : Service() {
                     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI)
                 }
 
+                VOLUME_MUTE_ACTION->{
+
+                    val audioManager = applicationContext.getSystemService(AUDIO_SERVICE) as AudioManager
+
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0)
+                }
+
+
                 STOP_ACTION -> {
-
-
 
                     stopForeground(Service.STOP_FOREGROUND_REMOVE)
                     stopSelf()
@@ -109,10 +116,18 @@ class ForegroundService : Service() {
             PendingIntent.FLAG_IMMUTABLE)
 
 
+
+        val volumeMuteIntent = Intent(this, ForegroundService::class.java)
+            .setAction(VOLUME_MUTE_ACTION)
+        val volumeMutePendingIntent = PendingIntent.getService(this, 0, volumeMuteIntent,
+            PendingIntent.FLAG_IMMUTABLE)
+
+
         customLayout.setOnClickPendingIntent(R.id.cancel, stopPendingIntent)
         customLayout.setOnClickPendingIntent(R.id.vol_up, volumeUpPendingIntent)
         customLayout.setOnClickPendingIntent(R.id.vol_down, volumeDownPendingIntent)
         customLayout.setOnClickPendingIntent(R.id.vol_max, volumeMaxPendingIntent)
+        customLayout.setOnClickPendingIntent(R.id.vol_mute, volumeMutePendingIntent)
 
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setCustomContentView(customLayout)
