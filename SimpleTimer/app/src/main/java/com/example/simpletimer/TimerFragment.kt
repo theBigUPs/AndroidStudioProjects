@@ -1,38 +1,25 @@
 package com.example.simpletimer
 
-import android.Manifest
-import android.app.Activity
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
+
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
-import android.text.Selection.setSelection
+
 import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
+
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
+
 import com.example.simpletimer.databinding.FragmentTimerBinding
-import kotlin.properties.Delegates
+
 
 class TimerFragment : Fragment() {
 
@@ -43,12 +30,10 @@ class TimerFragment : Fragment() {
 
     private val updateIntervalMillis = 1000 // Update every 1 second
     var totalDurationMillis :Long = 3
+    private lateinit var timer :CountDownTimer
+    private var started=false
 
 
-
-    companion object {
-        fun newInstance() = TimerFragment()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,15 +50,24 @@ class TimerFragment : Fragment() {
 
 
 
-
+        binding.emptyingProgressBar.progress = 100
 
 
         binding.startBtn.setOnClickListener {
             totalDurationMillis = binding.secondsTn.text.toString().toLong()*1000
             //Toast.makeText(context, totalDurationMillis.toString(), Toast.LENGTH_SHORT).show()
+            started=true
 
 
-            val timer = object : CountDownTimer(totalDurationMillis, updateIntervalMillis.toLong()) {
+            binding.secondsTn.isFocusableInTouchMode=false
+            binding.minutesTn.isFocusableInTouchMode=false
+            binding.hoursTn.isFocusableInTouchMode=false
+
+            timer = object : CountDownTimer(totalDurationMillis, updateIntervalMillis.toLong()) {
+
+
+
+
                 override fun onTick(millisUntilFinished: Long) {
                     // Calculate progress based on time elapsed
                     val timeElapsedMillis = totalDurationMillis - millisUntilFinished
@@ -82,11 +76,25 @@ class TimerFragment : Fragment() {
                 }
 
                 override fun onFinish() {
-                    // Ensure the progress bar reaches 100% at the end
                     binding.emptyingProgressBar.progress = 100
-                    //Toast.makeText(context, "fin", Toast.LENGTH_SHORT).show()
-                    val notification = MakeNotification()
-                    context?.let { notification.showNotification(it,"times up") }
+                    val delayMillis:Long = 200
+
+                    // Use view.postDelayed to schedule the code after the specified delay
+                    binding.emptyingProgressBar.postDelayed({
+                        val notification = MakeNotification()
+                        context?.let { notification.showNotification(it, "times up") }
+
+                        if (binding.loopSwitch.isChecked) {
+                            timer.start()
+                        }
+                        else
+                        {
+                            binding.secondsTn.isFocusableInTouchMode=true
+                            binding.minutesTn.isFocusableInTouchMode=true
+                            binding.hoursTn.isFocusableInTouchMode=true
+                            started = false
+                        }
+                    }, delayMillis)
 
                 }
             }
@@ -96,6 +104,22 @@ class TimerFragment : Fragment() {
             timer.start()
 
         }
+
+        binding.cancelBtn.setOnClickListener{
+
+
+            if(started)
+            {
+                binding.secondsTn.isFocusableInTouchMode=true
+                binding.minutesTn.isFocusableInTouchMode=true
+                binding.hoursTn.isFocusableInTouchMode=true
+                started = false
+                timer.cancel()
+                binding.emptyingProgressBar.progress = 100
+            }
+
+        }
+
 
 
         binding.secondsTn.setOnEditorActionListener { thisTextView, actionId, event ->
@@ -123,9 +147,9 @@ class TimerFragment : Fragment() {
 
         }
 
-        binding.secondsTn.onFocusChangeListener = View.OnFocusChangeListener { thisview, hasFocus ->
+        binding.secondsTn.onFocusChangeListener = View.OnFocusChangeListener { thisView, hasFocus ->
             if (hasFocus) {
-                (thisview as EditText).setText("")
+                (thisView as EditText).setText("")
             }
         }
 
@@ -156,9 +180,9 @@ class TimerFragment : Fragment() {
 
         }
 
-        binding.minutesTn.onFocusChangeListener = View.OnFocusChangeListener { thisview, hasFocus ->
+        binding.minutesTn.onFocusChangeListener = View.OnFocusChangeListener { thisView, hasFocus ->
             if (hasFocus) {
-                (thisview as EditText).setText("")
+                (thisView as EditText).setText("")
             }
         }
 
@@ -188,31 +212,11 @@ class TimerFragment : Fragment() {
         }
 
 
-        binding.hoursTn.onFocusChangeListener = View.OnFocusChangeListener { thisview, hasFocus ->
+        binding.hoursTn.onFocusChangeListener = View.OnFocusChangeListener { thisView, hasFocus ->
             if (hasFocus) {
-                (thisview as EditText).setText("")
+                (thisView as EditText).setText("")
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
