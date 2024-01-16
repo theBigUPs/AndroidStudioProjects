@@ -1,0 +1,28 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+id main
+id mainFragment
+id nav_graph
+id nav_host_fragment
+id pick_img
+id ref_image
+id res
+id textureView
+layout activity_main
+layout fragment_main
+mipmap ic_launcher
+mipmap ic_launcher_round
+navigation nav_graph
+string app_name
+style Theme.PoseDetection
+xml backup_rules
+xml data_extraction_rules

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.example.posedetection.app-mergeDebugResources-57:/layout/fragment_main.xml",
+        "source": "com.example.posedetection.app-main-60:/layout/fragment_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\upervan\\.gradle\\daemon\\7.5\\com.example.posedetection.app-mergeDebugResources-57:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\upervan\\.gradle\\daemon\\7.5\\com.example.posedetection.app-main-60:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\upervan\\.gradle\\daemon\\7.5\\com.example.posedetection.app-mergeDebugResources-57:\\layout\\fragment_main.xml",
+        "source": "C:\\Users\\upervan\\.gradle\\daemon\\7.5\\com.example.posedetection.app-main-60:\\layout\\fragment_main.xml"
+    }
+]
